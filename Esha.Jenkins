@@ -1,0 +1,23 @@
+pipeline{
+    agent any
+    tools{
+        maven 'Maven'
+    }
+    stages{
+        stage("git-checkout"){
+            steps{
+             git url:'https://github.com/SaiGit470/MavenProject.git'
+            }
+        }
+        stage("Build"){
+            steps{
+                sh "mvn clean install package"
+            }
+        }
+        stage("Deploy"){
+            steps{
+                deploy adapters: [tomcat8(credentialsId: 'Tomcat', path: '', url: 'http://54.88.117.19:8090/')], contextPath: null, war: '**/*.war'
+            }
+        }
+    }
+}
